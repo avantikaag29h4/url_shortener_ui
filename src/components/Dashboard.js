@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 const API = 'https://urlshortener-production-7d46.up.railway.app';
 
@@ -8,16 +8,7 @@ function Dashboard({ token, onLogout }) {
   const [error, setError] = useState('');
   const [urls, setUrls] = useState([]);
 
-//   useEffect(() => {
-    // fetchUrls();
-//   }, []);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-useEffect(() => {
-    fetchUrls();
-  }, []);
-
-  const fetchUrls = async () => {
+  const fetchUrls = useCallback(async () => {
     try {
       const response = await fetch(`${API}/api/urls`, {
         headers: { 'Authorization': `Bearer ${token}` }
@@ -29,7 +20,11 @@ useEffect(() => {
     } catch (err) {
       console.error('Failed to fetch URLs');
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    fetchUrls();
+  }, [fetchUrls]);
 
   const handleShorten = async () => {
     setLoading(true);
@@ -80,8 +75,6 @@ useEffect(() => {
 
   return (
     <div style={{ maxWidth: '800px', margin: '40px auto', padding: '0 20px' }}>
-
-      {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
         <h1>URL Shortener</h1>
         <button onClick={onLogout} style={{ padding: '8px 16px', cursor: 'pointer' }}>
@@ -89,7 +82,6 @@ useEffect(() => {
         </button>
       </div>
 
-      {/* Shorten Form */}
       <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
         <input
           type="text"
@@ -105,7 +97,6 @@ useEffect(() => {
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      {/* URLs Table */}
       {urls.length === 0 ? (
         <p style={{ color: 'gray' }}>No URLs yet. Shorten your first one above!</p>
       ) : (
