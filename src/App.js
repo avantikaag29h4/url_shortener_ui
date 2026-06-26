@@ -28,8 +28,7 @@ function App() {
   // If URL has reset token, show reset password page
   if (resetToken) {
     return <ResetPassword onSwitchToLogin={() => {
-      window.history.pushState({}, '', '/'); // remove token from URL
-      setPage('login');
+      window.location.href = '/'; // force full page reload to clear URL
     }} />;
   }
 
