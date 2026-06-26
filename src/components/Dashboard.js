@@ -73,14 +73,52 @@ function Dashboard({ token, onLogout }) {
     alert('Copied!');
   };
 
+//   const handleCopy = (shortUrl) => {
+//     navigator.clipboard.writeText(shortUrl);
+//     alert('Copied!');
+//   };
+
+  // ADD THIS RIGHT HERE
+  const handleDeleteAccount = async () => {
+    const confirm = window.confirm('Are you sure? This will delete your account and all your URLs permanently.');
+    
+    if (!confirm) return;
+
+    try {
+      const response = await fetch(`${API}/api/auth/delete-account`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.error);
+        return;
+      }
+
+      alert('Account deleted successfully');
+      onLogout();
+    } catch (err) {
+      alert('Something went wrong');
+    }
+  };
+
+
+
   return (
     <div style={{ maxWidth: '800px', margin: '40px auto', padding: '0 20px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-        <h1>URL Shortener</h1>
-        <button onClick={onLogout} style={{ padding: '8px 16px', cursor: 'pointer' }}>
-          Logout
-        </button>
-      </div>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+    <h1>URL Shortener</h1>
+    <div style={{ display: 'flex', gap: '10px' }}>
+    <button onClick={onLogout} style={{ padding: '8px 16px', cursor: 'pointer' }}>
+    Logout
+    </button>
+    <button onClick={handleDeleteAccount} style={{ padding: '8px 16px', cursor: 'pointer', color: 'white', background: 'red', border: 'none' }}>
+    Delete Account
+    </button>
+  </div>
+</div>
 
       <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
         <input
