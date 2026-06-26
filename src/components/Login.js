@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 const API = 'https://urlshortener-production-7d46.up.railway.app';
 
-function Login({ onLogin, onSwitchToRegister }) {
+function Login({ onLogin, onSwitchToRegister, onForgotPassword}) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -59,6 +59,13 @@ function Login({ onLogin, onSwitchToRegister }) {
       <button onClick={handleLogin} disabled={loading} style={{ width: '100%', padding: '10px' }}>
         {loading ? 'Logging in...' : 'Login'}
       </button>
+      <p style={{ marginTop: '10px', textAlign: 'center' }}>
+      <span onClick={onForgotPassword} style={{ color: 'blue', cursor: 'pointer' }}>
+       Forgot Password?
+      </span>
+      </p>
+
+
 
       <p style={{ marginTop: '20px', textAlign: 'center' }}>
         Don't have an account?{' '}
